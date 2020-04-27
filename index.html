@@ -1,0 +1,48 @@
+<html>
+<head>
+<title> Interactive Indian Map </title>
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <script src="jquery.min.js"></script>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="topojson.js"></script>
+    <script src="datamaps.ind.js"></script>
+    <script>
+        $( function(){
+            var map = new Datamap({
+                scope: 'india',
+                responsive: true,
+                element: document.getElementById('map'),
+                setProjection: function (element) {
+                    var projection = d3.geo.mercator()
+                        .center([78.9629, 23.5937]) // always in [East Latitude, North Longitude]
+                        .scale(900);
+                    var path = d3.geo.path().projection(projection);
+                    return { path: path, projection: projection };
+                },
+                geographyConfig: {
+                    dataUrl: 'india.json',
+                    borderColor: '#000000', // Black color
+                    popupTemplate: function(geography, data) {
+                        return '<div class="hoverinfo"><strong>' + geography.properties.name + '</strong></div>';
+                    }
+                },
+                fills: {
+                    defaultFill: '#FFF' // White color
+                }
+            });
+
+            window.addEventListener('resize', function() {
+                map.resize();
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="container">
+    <h1 style="text-align: center;">Interactive Indian Map</h1>
+    <div class="shadow p-3 mb-5 bg-white rounded" style="margin: 0%; padding:0%">
+        <div id="map" style="position: relative;"></div>
+    </div>
+</div>
+</body>
+</html>
